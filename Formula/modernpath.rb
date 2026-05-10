@@ -10,7 +10,7 @@ class Modernpath < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/modernpath/cli/releases/download/v#{version}/modernpath-darwin-arm64.tar.gz"
-      sha256 "PLACEHOLDER_DARWIN_ARM64_SHA256"
+      sha256 "b8d6472dd9a52e77915ee243e6a633c92ebd5cbd42993ba9730560d528d1eee6"
 
       def install
         bin.install "modernpath"
