@@ -56,20 +56,23 @@ jobs:
           # Update version
           sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/modernpath.rb
 
-          # Update SHA256 checksums (in order they appear in the file)
+          # Update SHA256 checksums by matching the URL pattern on the line before
           # darwin-arm64
-          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${DARWIN_ARM64}\"/" Formula/modernpath.rb
+          sed -i "/darwin-arm64\.tar\.gz/{n;s/sha256 \".*\"/sha256 \"${DARWIN_ARM64}\"/}" Formula/modernpath.rb
           # darwin-amd64
-          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${DARWIN_AMD64}\"/" Formula/modernpath.rb
+          sed -i "/darwin-amd64\.tar\.gz/{n;s/sha256 \".*\"/sha256 \"${DARWIN_AMD64}\"/}" Formula/modernpath.rb
           # linux-arm64
-          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${LINUX_ARM64}\"/" Formula/modernpath.rb
+          sed -i "/linux-arm64\.tar\.gz/{n;s/sha256 \".*\"/sha256 \"${LINUX_ARM64}\"/}" Formula/modernpath.rb
           # linux-amd64
-          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${LINUX_AMD64}\"/" Formula/modernpath.rb
+          sed -i "/linux-amd64\.tar\.gz/{n;s/sha256 \".*\"/sha256 \"${LINUX_AMD64}\"/}" Formula/modernpath.rb
+
+          # Show the result
+          cat Formula/modernpath.rb
 
       - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Formula/modernpath.rb
-          git commit -m "Update modernpath to v${{ inputs.version }}"
+          git diff --staged --quiet || git commit -m "Update modernpath to v${{ inputs.version }}"
           git push
