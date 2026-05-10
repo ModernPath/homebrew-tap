@@ -1,0 +1,72 @@
+# This workflow is triggered by the CLI repo when a new release is published.
+# It updates the formula with the new version and SHA256 checksums.
+#
+# To trigger this workflow from the CLI repo:
+# gh workflow run update-formula.yml -R modernpath/homebrew-tap \
+#   -f version=0.1.0 \
+#   -f darwin_arm64_sha256=abc123... \
+#   -f darwin_amd64_sha256=def456... \
+#   -f linux_arm64_sha256=ghi789... \
+#   -f linux_amd64_sha256=jkl012...
+
+name: Update Formula
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (without v prefix)'
+        required: true
+        type: string
+      darwin_arm64_sha256:
+        description: 'SHA256 for darwin-arm64 binary'
+        required: true
+        type: string
+      darwin_amd64_sha256:
+        description: 'SHA256 for darwin-amd64 binary'
+        required: true
+        type: string
+      linux_arm64_sha256:
+        description: 'SHA256 for linux-arm64 binary'
+        required: true
+        type: string
+      linux_amd64_sha256:
+        description: 'SHA256 for linux-amd64 binary'
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update Formula
+        run: |
+          VERSION="${{ inputs.version }}"
+          DARWIN_ARM64="${{ inputs.darwin_arm64_sha256 }}"
+          DARWIN_AMD64="${{ inputs.darwin_amd64_sha256 }}"
+          LINUX_ARM64="${{ inputs.linux_arm64_sha256 }}"
+          LINUX_AMD64="${{ inputs.linux_amd64_sha256 }}"
+
+          # Update version
+          sed -i "s/version \".*\"/version \"${VERSION}\"/" Formula/modernpath.rb
+
+          # Update SHA256 checksums (in order they appear in the file)
+          # darwin-arm64
+          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${DARWIN_ARM64}\"/" Formula/modernpath.rb
+          # darwin-amd64
+          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${DARWIN_AMD64}\"/" Formula/modernpath.rb
+          # linux-arm64
+          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${LINUX_ARM64}\"/" Formula/modernpath.rb
+          # linux-amd64
+          sed -i "0,/sha256 \".*\"/s/sha256 \".*\"/sha256 \"${LINUX_AMD64}\"/" Formula/modernpath.rb
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/modernpath.rb
+          git commit -m "Update modernpath to v${{ inputs.version }}"
+          git push
