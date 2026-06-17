@@ -6,7 +6,8 @@ This is the official [Homebrew](https://brew.sh) tap for the ModernPath CLI.
 
 ```bash
 brew tap modernpath/tap
-brew install modernpath
+brew trust --formula modernpath/tap/modernpath
+brew install modernpath/tap/modernpath
 ```
 
 ## Upgrade
