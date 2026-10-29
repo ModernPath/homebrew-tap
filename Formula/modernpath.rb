@@ -5,19 +5,19 @@ class Modernpath < Formula
   desc "Connect your local development environment to ModernPath for AI-powered codebase analysis"
   homepage "https://modernpath.ai"
   license "MIT"
-  version "0.25.0"
+  version "0.26.0"
 
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/modernpath/cli/releases/download/v#{version}/modernpath-darwin-arm64.tar.gz"
-      sha256 "7622fbc4d1f4ac8de47a2414dcdecaa2c87927ea9987378c5adfa7fbf9675220"
+      sha256 "e6cfb3b694f2013a701bb525477a3b83eedba2d0ef0b39a7e048a907d8c99301"
 
       def install
         bin.install "modernpath"
       end
     else
       url "https://github.com/modernpath/cli/releases/download/v#{version}/modernpath-darwin-amd64.tar.gz"
-      sha256 "8aee624c7cc9dc7b1cc7483ecf93dada27e97b036e6d124ab614da0a47b4205e"
+      sha256 "71454f68c9fca861d99e9fd2719648928c24f33dfc5f17a0e2e79007731a1ff6"
 
       def install
         bin.install "modernpath"
@@ -28,14 +28,14 @@ class Modernpath < Formula
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/modernpath/cli/releases/download/v#{version}/modernpath-linux-arm64.tar.gz"
-      sha256 "c7bbbe6f84a5eff5a92dbe187ffebeb2f2bdc4f7bb6a59a05efcce1b21023084"
+      sha256 "b9f9dc1e1d905daf63dd9e020c0bbafeb5df8a5280a3889caa57386ac350c7b3"
 
       def install
         bin.install "modernpath"
       end
     else
       url "https://github.com/modernpath/cli/releases/download/v#{version}/modernpath-linux-amd64.tar.gz"
-      sha256 "8c3929a745a82f01aafa52d27d68f1247effdf5cbdf042e5d3c547380fb78295"
+      sha256 "8df1fd99fb1fd43500078ef6129c70c05786e25a78066468c36a55d74723dc6a"
 
       def install
         bin.install "modernpath"
